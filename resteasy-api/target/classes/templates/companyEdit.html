@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorator="layout/layout">
+<head>
+
+ <th:block layout:fragment="script">
+      <script>
+		$(document).ready(function() {
+			$('.cnpj').mask('00.000.000/0000-00', {
+				reverse : true
+			});
+			$('.cep').mask('00000-000');
+			$('.telefone').mask('(00)0000-0000');
+			$('.dataAbertura').mask('00/00/0000');
+			$('.dataAbertura').datepicker({ dateFormat: 'dd/mm/yy' }); 
+		});
+      </script>
+ </th:block>
+
+<title>Companies</title>
+</head>
+<body>
+	<div layout:fragment="content">
+
+		<div class="container">
+	
+			<h1>Company</h1>
+	
+			<div class="container py-5">
+				<div class="row">
+					<div class="col-md-10 mx-auto">
+						<form class="form-group" th:object="${company}"
+							th:action="@{/app/companyEdit}" method="post">
+	
+							<div th:if="${#fields.hasGlobalErrors()}">
+							  <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+							</div>
+													
+							<p th:if="${#fields.hasErrors('global')}" th:errors="*{global}"
+	            					th:class="text-red">Incorrect data</p>
+							
+							<input th:type="hidden" th:field="*{id}" />
+							
+							<div class="form-group row">
+								<div class="col-sm-6">
+									<label for="fantasia">Nome fantasia</label> 
+									<input type="text"
+										class="form-control" id="fantasia"
+										th:field="*{fantasia}" />
+									<p th:if="${#fields.hasErrors('fantasia')}" th:errors="*{fantasia}" th:class="text-red">Incorrect data</p>
+								</div>
+								<div class="col-sm-6">
+									<label for="razaoSocial">Razão social</label> <input type="text"
+										class="form-control"
+										th:field="*{razaoSocial}"></input>
+									<p th:if="${#fields.hasErrors('razaoSocial')}" th:errors="*{razaoSocial}" th:class="text-red">Incorrect data</p>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-6">
+									<label for="cnpj">CNPJ</label> 
+									<input type="text"
+										class="form-control cnpj" th:field="*{cnpj}"></input>
+									
+									<p th:if="${#fields.hasErrors('cnpj')}" th:errors="*{cnpj}" th:class="text-red">Incorrect data</p>
+								</div>
+								<div class="col-sm-3">
+									<label for="dataAbertura">Data Abertura</label> <input type="text"
+										class="form-control dataAbertura"
+										th:field="*{dataAbertura}"></input>
+										
+										<p th:if="${#fields.hasErrors('dataAbertura')}" th:errors="*{dataAbertura}" th:class="text-red">Incorrect data</p>
+								</div>
+								<div class="col-sm-3">
+									<label for="telefone">Telefone</label> <input type="text"
+										class="form-control telefone"
+										th:field="*{telefone}"></input>
+								</div>
+								
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-6">
+									<label for="logradouro">Logradouro</label> <input type="text"
+										class="form-control"
+										th:field="*{logradouro}"></input>
+								</div>
+								<div class="col-sm-3">
+									<label for="uf">Número</label> <input type="text"
+										class="form-control" th:field="*{numero}"></input>
+								</div>
+								<div class="col-sm-3">
+									<label for="cep">Complemento</label> <input type="text"
+										class="form-control"
+										th:field="*{complemento}"></input>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-3">
+									<label for="content">Bairro</label> <input type="text"
+										class="form-control" th:field="*{bairro}"></input>
+								</div>
+								<div class="col-sm-3">
+									<label for="cidade">Cidade</label> <input type="text"
+										class="form-control" th:field="*{cidade}"></input>
+								</div>
+								<div class="col-sm-3">
+									<label for="uf">UF</label> <input type="text"
+										class="form-control" th:field="*{uf}"></input>
+								</div>
+								<div class="col-sm-3">
+									<label for="cep">CEP</label> <input type="text"
+										class="form-control cep" th:field="*{cep}"></input>
+								</div>
+							</div>
+							<button type="submit" class="btn btn-primary">Salvar</button>
+							<a href="#" th:href="@{/app/companiesList}" class="btn btn-danger"
+								role="button">Cancelar</a>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

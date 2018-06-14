@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorator="layout/layout">
+<head>
+
+ <th:block layout:fragment="script">
+      <script>
+		$(document).ready(function() {
+			$('.cnpj').mask('00.000.000/0000-00', {
+				reverse : true
+			});
+			$('.telefone').mask('(00)0000-0000');
+		});
+      </script>
+ </th:block>
+
+<title>Companies</title>
+</head>
+
+	<div layout:fragment="content">
+	    <div class="row">
+	        <h1>Companies</h1>
+	    </div>
+		<p>
+		    <a href="/app/companyEdit" th:href="@{/app/companyEdit}">Create</a>
+		</p>
+
+		<div class="row">
+			<table class="table">
+				<tr>
+					<th>Id</th>
+					<th>Fantasia</th>
+					<th>Razão social</th>
+					<th>CNPJ</th>
+					<th>Telefone</th>
+					<th>Cidade</th>
+					<th>UF</th>
+				</tr>
+				<tr th:each="company : ${companies}">
+					<td th:text="${company.id}"></td>
+					<td th:text="${company.fantasia}"></td>
+					<td th:text="${company.razaoSocial}"></td>
+					<td th:text="${company.cnpj}" class="cnpj"></td>
+					<td th:text="${company.telefone}" class="telefone"></td>
+					<td th:text="${company.cidade}"></td>
+					<td th:text="${company.uf}"></td>
+					<td><a href="/companyEdit/1"
+						th:href="@{/app/companyEdit/__${company.id}__}">Edit</a> <a
+						href="/companyDelete/1"
+						th:href="@{/app/companyDelete/__${company.id}__}">Delete</a></td>
+				</tr>
+			</table>
+		</div>
+		<div class="row">
+			<!--         <div class="form-group col-md-1"> -->
+			<!--             <select class="form-control pagination" id="pageSizeSelect"> -->
+			<!--                 <option th:each="pageSize : ${pageSizes}" th:text="${pageSize}" th:value="${pageSize}" -->
+			<!--                         th:selected="${pageSize} == ${selectedPageSize}"></option> -->
+			<!--             </select> -->
+			<!--         </div> -->
+			<div th:if="${companies.totalPages != 1}"
+				class="form-group col-md-11 pagination-centered">
+				<ul class="pagination">
+					<li th:class="${companies.number == 0} ? disabled"><a
+						class="page-link"
+						th:href="@{/app/companiesList/(pageSize=${selectedPageSize}, page=1)}">&laquo;</a>
+					</li>
+					<li th:class="${companies.number == 0} ? disabled"><a
+						class="page-link"
+						th:href="@{/app/companiesList/(pageSize=${selectedPageSize}, page=${companies.number})}">&larr;</a>
+					</li>
+					<li
+						th:class="${companies.number == (page - 1)} ? 'active pointer-disabled'"
+						th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+						<a class="page-link"
+						th:href="@{/app/companiesList/(pageSize=${selectedPageSize}, page=${page})}"
+						th:text="${page}"></a>
+					</li>
+					<li
+						th:class="${companies.number + 1 == companies.totalPages} ? disabled">
+						<a class="page-link"
+						th:href="@{/app/companiesList/(pageSize=${selectedPageSize}, page=${companies.number + 2})}">&rarr;</a>
+					</li>
+					<li
+						th:class="${companies.number + 1 == companies.totalPages} ? disabled">
+						<a class="page-link"
+						th:href="@{/app/companiesList/(pageSize=${selectedPageSize}, page=${companies.totalPages})}">&raquo;</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+
+</body>
+</html>
