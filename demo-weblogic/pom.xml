@@ -45,12 +45,46 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+
+    <scm>
+        <connection>scm:svn:http://127.0.0.1/dummy</connection>
+        <developerConnection>scm:svn:https://127.0.0.1/dummy</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://127.0.0.1/dummy</url>
+    </scm>
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+			        <doUpdate>false</doUpdate>
+			        <revisionOnScmFailure>unknownbuild</revisionOnScmFailure>
+			        <providerImplementations>
+					  <svn>javasvn</svn>
+					</providerImplementations>
+					<format>{0,date,yyyyMMddHHmmss}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -59,6 +93,10 @@
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<archive>
+						<manifestEntries>
+							<WebLogic-Application-Version>${project.version}_${buildNumber}</WebLogic-Application-Version>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
 						<manifest>
 							<addDefaultImplementationEntries>false</addDefaultImplementationEntries>
 						</manifest>
